@@ -145,7 +145,7 @@ class UserController extends Controller
         try{
 
             if (!session()->has('user_id')) {
-                return redirect('/login')->with('error', 'You must be logged in to access the menu.');
+                return redirect('/');
             }
 
             $listPeserta = DB::table('peserta')->where('is_delete', '0')->get();
@@ -165,7 +165,7 @@ class UserController extends Controller
         try{
 
             if (!session()->has('user_id')) {
-                return redirect('/login')->with('error', 'You must be logged in to access the menu.');
+                return redirect('/');
             }
 
             if($request->input('proses') == "approve"){
@@ -283,10 +283,6 @@ class UserController extends Controller
     public function postbuktitransfer(Request $request)
     {
         try{
-
-            if (!session()->has('user_id')) {
-                return redirect('/login')->with('error', 'You must be logged in to access the menu.');
-            }
             
             // Upload foto
             $filename = null;

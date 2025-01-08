@@ -169,7 +169,11 @@
                         <div class="form-group">
                             <label><strong>Bukti Transfer:</strong></label>
                             <a id="imageLinkTransfer" href="#" target="_blank">
-                                <img id="currentImageTransfer" src="" alt="Current Image" style="max-width: 100px; max-height: 100px;" >
+                                <img 
+                                    id="currentImageTransfer" 
+                                    src="" 
+                                    alt="Current Image" 
+                                    style="max-width: 100px; max-height: 100px;">
                             </a>
                         </div>                        
                     </div>
@@ -201,7 +205,7 @@
 $(document).ready(function() {
     $('#dataTable').dataTable({
         "lengthMenu": [10, 20, 50, 100],
-        "pageLength": 5,
+        "pageLength": 10,
         searching: true
     });
 
@@ -297,5 +301,19 @@ $(document).ready(function() {
 });
 </script>
 
+<script>
+
+    function handleImageError(imgElement) {
+    const textElement = document.createElement('span');
+    textElement.textContent = 'belum bayar';
+    textElement.style.color = 'red';
+    textElement.style.fontWeight = 'bold';
+    const parentLink = imgElement.parentElement;
+    parentLink.replaceChild(textElement, imgElement);
+    parentLink.href = '#';
+}
+
+
+</script>
 
 @endsection

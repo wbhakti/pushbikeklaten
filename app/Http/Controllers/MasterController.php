@@ -13,7 +13,7 @@ class MasterController extends Controller
     {
         try{
             if (!session()->has('user_id')) {
-                return redirect('/login')->with('error', 'You must be logged in to access the menu.');
+                return redirect('/');
             }
             //get all data campaign
             $listSlider = DB::table('slider')->get();
@@ -33,7 +33,7 @@ class MasterController extends Controller
         try{
 
             if (!session()->has('user_id')) {
-                return redirect('/login')->with('error', 'You must be logged in to access the menu.');
+                return redirect('/');
             }
 
             if($request->input('proses') == "save"){
@@ -96,7 +96,7 @@ class MasterController extends Controller
     {
         try{
             if (!session()->has('user_id')) {
-                return redirect('/login')->with('error', 'You must be logged in to access the menu.');
+                return redirect('/');
             }
 
             $listEvent = DB::table('event')->get();
@@ -118,7 +118,7 @@ class MasterController extends Controller
         try{
 
             if (!session()->has('user_id')) {
-                return redirect('/login')->with('error', 'You must be logged in to access the menu.');
+                return redirect('/');
             }
 
             if($request->input('proses') == "save"){
@@ -184,7 +184,7 @@ class MasterController extends Controller
     {
         try{
             if (!session()->has('user_id')) {
-                return redirect('/login')->with('error', 'You must be logged in to access the menu.');
+                return redirect('/');
             }
             
             $listKategori = DB::table('kategori')->get();
@@ -204,7 +204,7 @@ class MasterController extends Controller
         try{
 
             if (!session()->has('user_id')) {
-                return redirect('/login')->with('error', 'You must be logged in to access the menu.');
+                return redirect('/');
             }
             
             if($request->input('proses') == "save"){
@@ -232,7 +232,7 @@ class MasterController extends Controller
     public function report()
     {
         if (!session()->has('user_id')) {
-            return redirect('/login')->with('error', 'You must be logged in to access the menu.');
+            return redirect('/');
         }
         
         return view('report');

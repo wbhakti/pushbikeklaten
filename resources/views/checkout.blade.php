@@ -7,11 +7,12 @@
             <div class="col-md-8">
                 <div class="card border-dark shadow-sm">
                     <div class="card-header bg-info text-white text-center">
-                        <h4 class="mb-0">Pendaftaran Berhasil</h4>
+                        <h4 class="mb-0">Pemesanan Berhasil</h4>
                     </div>
                     <div class="card-body">
                         <h5 class="card-title text-center mb-4">Terima kasih, {{ $nama_lengkap }}!</h5>
-                        <p class="text-muted text-center mb-4">Pendaftaran Anda telah berhasil. Berikut adalah detail pendaftaran dan informasi pembayaran Anda:</p>
+                        <p class="text-muted text-center mb-4">Proses pemesanan anda telah sukses, Segera lakukan pembayaran</p>
+                        <p class="text-muted text-center mb-4">Berikut adalah detail pendaftaran dan informasi pembayaran Anda:</p>
                         
                          <!-- Ringkasan Pendaftaran -->
                         <div class="text-center">
@@ -43,7 +44,7 @@
                                         <span class="ms-2 text-secondary">{{ $kategori_id }}</span>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between">
-                                        <span class="fw-bold">Size Slimsuit:</span>
+                                        <span class="fw-bold">Size Jersey:</span>
                                         <span class="ms-2 text-secondary">{{ $size_slim_suit }}</span>
                                     </li>
                                 </ul>
@@ -80,7 +81,7 @@
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between border-0 p-0">
                                             <span class="fw-bold">Atas Nama:</span>
-                                            <span class="text-secondary">Wisnu Bhati Prasetyo</span>
+                                            <span class="text-secondary">Wisnu Bhakti Prasetyo</span>
                                         </li>
                                     </ul>
                                 </div>

@@ -34,7 +34,7 @@ class HomeController extends Controller
     public function dashboard()
     {
         if (!session()->has('user_id')) {
-            return redirect('/login')->with('error', 'You must be logged in to access the dashboard.');
+            return redirect('/');
         } else {
             return view('dashboard');
         }
