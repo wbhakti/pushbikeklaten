@@ -81,12 +81,6 @@
                         </div>
                     </div>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url('dashboard/report') }}">
-                        <i class="fas fa-fw fa-chart-area"></i>
-                        <span>Report</span>
-                    </a>
-                </li>
             @endif
 
             <!-- Divider -->

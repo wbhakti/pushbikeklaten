@@ -27,6 +27,7 @@
                             </div>
                             <form method="POST" action="/postregister" enctype="multipart/form-data">
                                 @csrf
+                                <input type="text" value="{{ $idEvent }}" name="idEvent" hidden>
                                 <div class="row justify-content-center">
                                     <div class="col-md-8 mx-auto">
                                         <div class="mb-3">

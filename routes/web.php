@@ -23,7 +23,7 @@ Route::get('/dashboard/slider', 'App\Http\Controllers\MasterController@slider');
 Route::get('/dashboard/event', 'App\Http\Controllers\MasterController@event');
 Route::get('/dashboard/listregistration', 'App\Http\Controllers\UserController@listregistration');
 Route::get('/dashboard/kategori', 'App\Http\Controllers\MasterController@kategori');
-Route::get('/dashboard/report', 'App\Http\Controllers\MasterController@report');
+Route::get('/getreportevent', 'App\Http\Controllers\UserController@reportevent');
 
 Route::post('/postlogin', 'App\Http\Controllers\UserController@postlogin');
 Route::post('/postslider', 'App\Http\Controllers\MasterController@postslider');
@@ -32,4 +32,3 @@ Route::post('/postkategori', 'App\Http\Controllers\MasterController@postkategori
 Route::post('/postregister', 'App\Http\Controllers\UserController@postregister');
 Route::post('/postbuktitransfer', 'App\Http\Controllers\UserController@postbuktitransfer');
 Route::post('/postapproveuser', 'App\Http\Controllers\UserController@postapproveuser');
-Route::get('/postreport', 'App\Http\Controllers\MasterController@postreport');

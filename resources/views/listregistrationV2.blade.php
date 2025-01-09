@@ -3,33 +3,31 @@
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
+<style>
+    .card-header {
+        background-color: #fff;
+    }
+    .mr-0 {
+        margin-right: 0;
+    }
+    .ml-auto {
+        margin-left: auto;
+    }
+    .d-block {
+        display: block;
+    }
+    .button-group a {
+        margin-bottom: 10px;
+    }
+</style>
 
 <!-- CSS custom -->
 <link href="{{ asset('vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet" type="text/css">
 
-<style>
-.card-header {
-    background-color: #fff;
-}
-.mr-0 {
-    margin-right: 0;
-}
-.ml-auto {
-    margin-left: auto;
-}
-.d-block {
-    display: block;
-}
-.button-group a {
-    margin-bottom: 10px;
-}
-</style>
-
-<!-- DataTales Example -->
 <div class="card shadow mb-4 custom-card-header">
     <div class="card-header py-3">
         <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Data Pendaftaran Peserta</h1>
+        <h1 class="h3 mb-2 text-gray-800">Report Pendaftaran Peserta Event</h1>
         <p class="mb-4" style="color:black">
             loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum
         </p>
@@ -41,8 +39,37 @@
     </div>
 
     <div class="card-body">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form method="GET" action="/getreportevent">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="outlet" class="form-label">Event</label>
+                        <select class="form-control" id="event" name="event" required>
+                            <option value="" disabled {{ request('event') ? '' : 'selected' }}>Pilih Event</option>
+                            @foreach($event as $item)
+                            <option value="{{ $item->id_event }}|{{ $item->title_event }}" 
+                                {{ request('event') == $item->id_event . '|' . $item->title_event ? 'selected' : '' }}>
+                                {{ $item->title_event }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-2">
+                            <button type="submit" class="btn btn-primary w-100" name="action" value="report">Lihat</button>
+                        </div>
+                        <div class="col-6">
+                            <button type="submit" class="btn btn-success w-100" name="action" value="download">Download</button>
+                        </div>
+                    </div>                                       
+                </form>
+            </div>
+        </div>
+
+        <hr>
         <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <table id="datatablesSimple" class="table table-bordered">
                 <thead>
                     <tr>
                         <th>No Registrasi</th>
@@ -105,8 +132,6 @@
             </table>
         </div>
     </div>
-
-    <hr>
 
     <!-- Modal -->
     <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
@@ -191,10 +216,10 @@
 
 </div>
 
-@if(session('success'))
-<script>
-    alert('{{ session('success') }}');
-</script>
+@if (session('error'))
+        <script>
+            alert('{{ session('error') }}');
+        </script>
 @endif
 
 <!-- Page level plugins -->
@@ -204,103 +229,105 @@
 <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
 
 <script>
-$(document).ready(function() {
-    $('#dataTable').dataTable({
-        "lengthMenu": [10, 20, 50, 100],
-        "pageLength": 10,
-        searching: true
-    });
-
-    $('#detailsModal').on('show.bs.modal', function(event) {
-        var button = $(event.relatedTarget);
-        var rowid = button.data('rowid');
-        var nama = button.data('nama');
-        var nomorHp = String(button.data('nomorhp'));
-        var email = button.data('email');
-        var namaTeam = button.data('namateam');
-        var statusPembayaran = button.data('statuspembayaran');
-        var tanggalDaftar = button.data('tanggaldaftar');
-        var kategori = button.data('kategori');
-        var slimsuit = button.data('slimsuit');
-        var noplate = button.data('noplate');
-        var alamat = button.data('alamat');
-        var img = button.data('img');
-        var statusUser = button.data('statususer');
-        var buktiTransfer = button.data('buktitransfer');
-
-        var modal = $(this);
-        modal.find('#editRowid').val(rowid);
-        modal.find('#modalNama').val(nama);
-        modal.find('#modalNomorHp').val(nomorHp);
-        modal.find('#modalEmail').val(email);
-        modal.find('#modalNamaTeam').val(namaTeam);
-        modal.find('#modalStatusPembayaran').val(statusPembayaran);
-        modal.find('#modalTanggalDaftar').val(tanggalDaftar);
-        modal.find('#modalkategori').val(kategori);
-        modal.find('#modalSizeSlimsuit').val(slimsuit);
-        modal.find('#modalNoPlate').val(noplate);
-        modal.find('#modalAlamat').val(alamat);
-        modal.find('#currentImage').attr('src', "{{ url('/webevent/public/img') }}/" + img);
-        modal.find('#imageLink').attr('href', "{{ url('/webevent/public/img') }}/" + img);
-        modal.find('#currentImageTransfer').attr('src', "{{ url('/webevent/public/invoice') }}/" + buktiTransfer);
-        modal.find('#imageLinkTransfer').attr('href', "{{ url('/webevent/public/invoice') }}/" + buktiTransfer);
-
-        if (!buktiTransfer || !buktiTransfer.includes('.jpg')) {
-            const textElement = $('<span>')
-                .text('Belum bayar')
-                .css({
-                    color: 'red',
-                    fontWeight: 'bold'
-                });
-
-            const parentLink = modal.find('#imageLinkTransfer');
-            parentLink.empty().append(textElement);
-            parentLink.attr('href', '#');
-        }
-
-
-        if (statusUser === 'PENDING') {
-            modal.find('button[name="proses"][value="approve"]').show();
-        } else if (statusUser === 'CONFIRMATION') {
-            modal.find('button[name="proses"][value="approve"]').show();
-            modal.find('a#proses-edit').hide();
-        }
-        else {
-            modal.find('button[name="proses"][value="approve"]').hide();
-            modal.find('a#proses-edit').hide();
-        }
-
-        //kirim WA
-        if (nomorHp.startsWith("0")) {
-            nomorHp = "62" + nomorHp.substring(1);
-        }
-        var waLink = "https://wa.me/" + nomorHp + "?text=Hallo%20Robo%20Racer,,%0aMohon%20konfrmasi%20untuk%20pendftaran%20Robo%20Race%202025%20apakah%20mau%20untuk%20melanjutkan%20registrasi%20kak?%0aRobo%20tunggu%20konfirmasinya%20hari%20ini%20jam%2020:00%20wib%20dengan%20melampirkan%20bukti%20Transfer.%0aTerimakasih,,";
-        $(this).find('a#proses-edit').attr('href', waLink).off('click').on('click', function(e) {
-            e.preventDefault(); 
-            $.ajax({
-                url: '/postapproveuser',
-                type: 'POST',
-                data: {
-                    rowid: rowid,
-                    proses: 'CONFIRMATION'
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    alert(response.message);
-                    window.open(waLink, '_blank');
-                    location.reload();
-                },
-                error: function(xhr) {
-                    console.log('Response Text: ' + xhr.responseText);
-                    alert('Gagal update data.');
-                }
-            });
+    $(document).ready(function() {
+        // Inisialisasi DataTables
+        $('#datatablesSimple').DataTable({
+            "lengthMenu": [10, 20, 50, 100],
+            "pageLength": 5,
+            responsive: true,
+            searching: true
         });
 
+        $('#detailsModal').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            var rowid = button.data('rowid');
+            var nama = button.data('nama');
+            var nomorHp = String(button.data('nomorhp'));
+            var email = button.data('email');
+            var namaTeam = button.data('namateam');
+            var statusPembayaran = button.data('statuspembayaran');
+            var tanggalDaftar = button.data('tanggaldaftar');
+            var kategori = button.data('kategori');
+            var slimsuit = button.data('slimsuit');
+            var noplate = button.data('noplate');
+            var alamat = button.data('alamat');
+            var img = button.data('img');
+            var statusUser = button.data('statususer');
+            var buktiTransfer = button.data('buktitransfer');
+
+            var modal = $(this);
+            modal.find('#editRowid').val(rowid);
+            modal.find('#modalNama').val(nama);
+            modal.find('#modalNomorHp').val(nomorHp);
+            modal.find('#modalEmail').val(email);
+            modal.find('#modalNamaTeam').val(namaTeam);
+            modal.find('#modalStatusPembayaran').val(statusPembayaran);
+            modal.find('#modalTanggalDaftar').val(tanggalDaftar);
+            modal.find('#modalkategori').val(kategori);
+            modal.find('#modalSizeSlimsuit').val(slimsuit);
+            modal.find('#modalNoPlate').val(noplate);
+            modal.find('#modalAlamat').val(alamat);
+            modal.find('#currentImage').attr('src', "{{ url('/webevent/public/img') }}/" + img);
+            modal.find('#imageLink').attr('href', "{{ url('/webevent/public/img') }}/" + img);
+            modal.find('#currentImageTransfer').attr('src', "{{ url('/webevent/public/invoice') }}/" + buktiTransfer);
+            modal.find('#imageLinkTransfer').attr('href', "{{ url('/webevent/public/invoice') }}/" + buktiTransfer);
+
+            if (!buktiTransfer || !buktiTransfer.includes('.jpg')) {
+                const textElement = $('<span>')
+                    .text('Belum bayar')
+                    .css({
+                        color: 'red',
+                        fontWeight: 'bold'
+                    });
+
+                const parentLink = modal.find('#imageLinkTransfer');
+                parentLink.empty().append(textElement);
+                parentLink.attr('href', '#');
+            }
+
+
+            if (statusUser === 'PENDING') {
+                modal.find('button[name="proses"][value="approve"]').show();
+            } else if (statusUser === 'CONFIRMATION') {
+                modal.find('button[name="proses"][value="approve"]').show();
+                modal.find('a#proses-edit').hide();
+            }
+            else {
+                modal.find('button[name="proses"][value="approve"]').hide();
+                modal.find('a#proses-edit').hide();
+            }
+
+            //kirim WA
+            if (nomorHp.startsWith("0")) {
+                nomorHp = "62" + nomorHp.substring(1);
+            }
+            var waLink = "https://wa.me/" + nomorHp + "?text=Hallo%20Robo%20Racer,,%0aMohon%20konfrmasi%20untuk%20pendftaran%20Robo%20Race%202025%20apakah%20mau%20untuk%20melanjutkan%20registrasi%20kak?%0aRobo%20tunggu%20konfirmasinya%20hari%20ini%20jam%2020:00%20wib%20dengan%20melampirkan%20bukti%20Transfer.%0aTerimakasih,,";
+            $(this).find('a#proses-edit').attr('href', waLink).off('click').on('click', function(e) {
+                e.preventDefault(); 
+                $.ajax({
+                    url: '/postapproveuser',
+                    type: 'POST',
+                    data: {
+                        rowid: rowid,
+                        proses: 'CONFIRMATION'
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        alert(response.message);
+                        window.open(waLink, '_blank');
+                        location.reload();
+                    },
+                    error: function(xhr) {
+                        console.log('Response Text: ' + xhr.responseText);
+                        alert('Gagal update data.');
+                    }
+                });
+            });
+
+        });
     });
-});
 </script>
 
 @endsection
