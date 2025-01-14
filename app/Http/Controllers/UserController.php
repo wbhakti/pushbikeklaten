@@ -92,10 +92,17 @@ class UserController extends Controller
 
             // Upload foto
             $filename = null;
+            
             if ($request->hasFile('foto_akta_kia')) {
-                $file = $request->file('foto_akta_kia');
-                $filename = 'foto_'.$idKategori.'_'.$request->input('nomor_hp').'.jpg';
-                $file->move(public_path('img'), $filename);
+                if ($request->file('foto_akta_kia')->extension() == "pdf") {
+                    $file = $request->file('foto_akta_kia');
+                    $filename = 'foto_'.$idKategori.'_'.$request->input('nomor_hp').'.pdf';
+                    $file->move(public_path('img'), $filename);
+                } else {
+                    $file = $request->file('foto_akta_kia');
+                    $filename = 'foto_'.$idKategori.'_'.$request->input('nomor_hp').'.jpg';
+                    $file->move(public_path('img'), $filename);
+                }
             }
 
             $suffix = ''; // Suffix untuk menandakan duplikasi
@@ -411,9 +418,15 @@ class UserController extends Controller
             // Upload foto
             $filename = null;
             if ($request->hasFile('bukti_transfer')) {
-                $file = $request->file('bukti_transfer');
-                $filename = 'buktitransfer_'.date('YmdHis').'_'.$request->input('nohp').'.jpg';
-                $file->move(public_path('invoice'), $filename);
+                if ($request->file('bukti_transfer')->extension() == "pdf") {
+                    $file = $request->file('bukti_transfer');
+                    $filename = 'buktitransfer_'.date('YmdHis').'_'.$request->input('nohp').'.pdf';
+                    $file->move(public_path('invoice'), $filename);
+                } else {
+                    $file = $request->file('bukti_transfer');
+                    $filename = 'buktitransfer_'.date('YmdHis').'_'.$request->input('nohp').'.jpg';
+                    $file->move(public_path('invoice'), $filename);
+                }
             }
 
             $lastRow = DB::table('peserta')
