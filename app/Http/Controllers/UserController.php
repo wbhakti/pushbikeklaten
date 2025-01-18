@@ -259,13 +259,15 @@ class UserController extends Controller
                 $sheet->setCellValue("B$startRow", 'ID Transaksi');
                 $sheet->setCellValue("C$startRow", 'Nama Lengkap');
                 $sheet->setCellValue("D$startRow", 'Number Plate');
-                $sheet->setCellValue("E$startRow", 'Nama Team');
-                $sheet->setCellValue("F$startRow", 'Kategori');
-                $sheet->setCellValue("G$startRow", 'Size Jersey');
-                $sheet->setCellValue("H$startRow", 'Nomor HP');
-                $sheet->setCellValue("I$startRow", 'Alamat');
-                $sheet->setCellValue("J$startRow", 'Pembayaran');
-                $sheet->setCellValue("K$startRow", 'Status');
+                $sheet->setCellValue("E$startRow", 'Tanggal Lahir');
+                $sheet->setCellValue("F$startRow", 'Nama Team');
+                $sheet->setCellValue("G$startRow", 'Kategori');
+                $sheet->setCellValue("H$startRow", 'Group');
+                $sheet->setCellValue("I$startRow", 'Size Jersey');
+                $sheet->setCellValue("J$startRow", 'Nomor HP');
+                $sheet->setCellValue("K$startRow", 'Alamat');
+                $sheet->setCellValue("L$startRow", 'Pembayaran');
+                $sheet->setCellValue("M$startRow", 'Status');
 
                 // Styling header kolom
                 $sheet->getStyle("A$startRow:K$startRow")->getFont()->setBold(true);
@@ -280,13 +282,15 @@ class UserController extends Controller
                     $sheet->setCellValue("B$row", $data->rowid);
                     $sheet->setCellValue("C$row", $data->nama_lengkap);
                     $sheet->setCellValue("D$row", $data->number_plate);
-                    $sheet->setCellValue("E$row", $data->nama_team);
-                    $sheet->setCellValue("F$row", $data->kategori);
-                    $sheet->setCellValue("G$row", $data->size_slim_suit);
-                    $sheet->setCellValue("H$row", $data->nomor_hp);
-                    $sheet->setCellValue("I$row", $data->alamat_domisili);
-                    $sheet->setCellValue("J$row", $data->status_pembayaran);
-                    $sheet->setCellValue("K$row", $data->status_user);
+                    $sheet->setCellValue("E$row", $data->tanggal_lahir);
+                    $sheet->setCellValue("F$row", $data->nama_team);
+                    $sheet->setCellValue("G$row", $data->kategori);
+                    $sheet->setCellValue("H$row", $data->group_type);
+                    $sheet->setCellValue("I$row", $data->size_slim_suit);
+                    $sheet->setCellValue("J$row", $data->nomor_hp);
+                    $sheet->setCellValue("K$row", $data->alamat_domisili);
+                    $sheet->setCellValue("L$row", $data->status_pembayaran);
+                    $sheet->setCellValue("M$row", $data->status_user);
                     $row++;
                 }
 
