@@ -47,6 +47,8 @@
                                                     <textarea class="form-control" name="{{ $field['name'] }}" id="{{ $field['name'] }}" rows="3" placeholder="Masukkan Alamat Domisili" required></textarea>
                                                 @elseif ($field['name'] === 'foto_akta_kia')
                                                     <input type="file" class="form-control" name="{{ $field['name'] }}" id="{{ $field['name'] }}" required>
+                                                @elseif ($field['name'] === 'tanggal_lahir')
+                                                    <input type="date" class="form-control" name="{{ $field['name'] }}" id="{{ $field['name'] }}" required>
                                                 @elseif ($field['name'] === 'number_plate')
                                                     <input class="form-control" name="{{ $field['name'] }}" id="{{ $field['name'] }}" 
                                                         oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"

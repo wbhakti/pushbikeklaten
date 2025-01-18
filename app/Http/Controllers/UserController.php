@@ -98,6 +98,7 @@ class UserController extends Controller
                     $file = $request->file('foto_akta_kia');
                     $filename = 'foto_'.$idKategori.'_'.$request->input('nomor_hp').'.pdf';
                     $file->move(public_path('img'), $filename);
+
                 } else {
                     $file = $request->file('foto_akta_kia');
                     $filename = 'foto_'.$idKategori.'_'.$request->input('nomor_hp').'.jpg';
@@ -111,6 +112,19 @@ class UserController extends Controller
             while (DB::table('peserta')->where('kategori_id', $idKategori)->where('number_plate', $request->input('number_plate') . $suffix)->exists()) {
                 $suffix = chr(65 + $count - 1); //'A'
                 $count++;
+            }
+
+            $mtgl_lahir = new Carbon( $request->input('tanggal_lahir') );
+            $mtahun_lahir = $mtgl_lahir->format('Y');
+            $mbulan_lahir = $mtgl_lahir->format('m');
+            $group = "MERGE";
+
+            if ($mtahun_lahir == "2022" || $mtahun_lahir == "2021" || $mtahun_lahir == "2020"){
+                if ($mbulan_lahir < 7){
+                    $group = "BIG";
+                } else {
+                    $group = "JUNIOR";
+                }
             }
 
             // Simpan data registrasi
@@ -128,6 +142,8 @@ class UserController extends Controller
                 'status_pembayaran' => 'BELUM_LUNAS',
                 'addtime' => Carbon::now()->addHours(7)->format('Y-m-d H:i:s'),
                 'id_event' => $request->input('idEvent'),
+                'tanggal_lahir' => $request->input('tanggal_lahir'),
+                'group_type' => $group,
             ]);
 
             // Redirect ke halaman checkout
@@ -137,6 +153,7 @@ class UserController extends Controller
                 'number_plate' => $request->input('number_plate'),
                 'nama_team' => $request->input('nama_team'),
                 'alamat_domisili' => $request->input('alamat_domisili'),
+                'tanggal_lahir' => $request->input('tanggal_lahir'),
                 'kategori_id' => $namaKategori,
                 'foto_akta_kia' => $filename,
                 'size_slim_suit' => $request->input('size_slim_suit'),
