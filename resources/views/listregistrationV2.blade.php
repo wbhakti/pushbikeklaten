@@ -74,8 +74,8 @@
                     <tr>
                         <th>No Registrasi</th>
                         <th>Nama Peserta</th>
-                        <th>Event</th>
                         <th>Kategori</th>
+                        <th>Group</th>
                         <th>Nomor HP</th>
                         <th>Nama Team</th>
                         <th>Pembayaran</th>
@@ -90,8 +90,8 @@
                     <tr>
                         <td>{{ $item->rowid }}</td>
                         <td>{{ $item->nama_lengkap }}</td>
-                        <td>{{ $item->title_event }}</td>
                         <td>{{ $item->nama_kategori }}</td>
+                        <td>{{ $item->group_type }}</td>
                         <td>{{ $item->nomor_hp }}</td>
                         <td>{{ $item->nama_team }}</td>
                         <td>{{ $item->status_pembayaran }}</td>
@@ -113,6 +113,8 @@
                                     data-alamat="{{ $item->alamat_domisili }}"
                                     data-img="{{ $item->foto_akta_kia }}"
                                     data-statususer="{{ $item->status_user }}"
+                                    data-group="{{ $item->group_type }}"
+                                    data-tanggallahir="{{ $item->tanggal_lahir }}"
                                     data-buktitransfer="{{ $item->foto_bukti_trf }}">
                                     Detail
                                 </button>
@@ -184,8 +186,16 @@
                             <input type="text" class="form-control" id="modalSizeSlimsuit" readonly>
                         </div>
                         <div class="form-group">
+                            <label for="modalTanggalLahir"><strong>Tanggal Lahir:</strong></label>
+                            <input type="text" class="form-control" id="modalTanggalLahir" name="tanggal_lahir" readonly>
+                        </div>
+                        <div class="form-group">
                             <label for="modalkategori"><strong>Kategori:</strong></label>
                             <input type="text" class="form-control" id="modalkategori" name="kategori" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="modalGroup"><strong>Group:</strong></label>
+                            <input type="text" class="form-control" id="modalGroup" name="group" readonly>
                         </div>
                         <div class="form-group">
                             <label><strong>Foto Akta/Kia:</strong></label>
@@ -248,6 +258,8 @@
             var statusPembayaran = button.data('statuspembayaran');
             var tanggalDaftar = button.data('tanggaldaftar');
             var kategori = button.data('kategori');
+            var tanggalLahir = button.data('tanggallahir');
+            var group = button.data('group');
             var slimsuit = button.data('slimsuit');
             var noplate = button.data('noplate');
             var alamat = button.data('alamat');
@@ -263,7 +275,9 @@
             modal.find('#modalNamaTeam').val(namaTeam);
             modal.find('#modalStatusPembayaran').val(statusPembayaran);
             modal.find('#modalTanggalDaftar').val(tanggalDaftar);
+            modal.find('#modalTanggalLahir').val(tanggalLahir);
             modal.find('#modalkategori').val(kategori);
+            modal.find('#modalGroup').val(group);
             modal.find('#modalSizeSlimsuit').val(slimsuit);
             modal.find('#modalNoPlate').val(noplate);
             modal.find('#modalAlamat').val(alamat);
