@@ -17,7 +17,9 @@ class HomeController extends Controller
             //$listEvent = DB::table('event')->get();
 
             // Paginate data event
-            $listEvent = DB::table('event')->paginate(3); // Ubah 3 sesuai dengan jumlah item per halaman yang diinginkan
+            $listEvent = DB::table('event')
+            ->where('is_active', 'Y')
+            ->paginate(3); // Ubah 3 sesuai dengan jumlah item per halaman yang diinginkan
 
             // Mengirim data ke tampilan
             return view('home', [
