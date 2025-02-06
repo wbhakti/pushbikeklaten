@@ -187,7 +187,9 @@ class MasterController extends Controller
                 return redirect('/');
             }
             
-            $listKategori = DB::table('kategori')->get();
+            $listKategori = DB::table('kategori')
+            ->where('is_delete', 'false')
+            ->get();
 
             // Mengirim data ke tampilan
             return view('masterkategori', [

@@ -315,7 +315,8 @@
             if (nomorHp.startsWith("0")) {
                 nomorHp = "62" + nomorHp.substring(1);
             }
-            var waLink = "https://wa.me/" + nomorHp + "?text=Hallo%20Robo%20Racer,,%0aMohon%20konfrmasi%20untuk%20pendftaran%20Robo%20Race%202025%20apakah%20mau%20untuk%20melanjutkan%20registrasi%20kak?%0aRobo%20tunggu%20konfirmasinya%20hari%20ini%20jam%2020:00%20wib%20dengan%20melampirkan%20bukti%20Transfer.%0aTerimakasih,,";
+            // var waLink = "https://wa.me/" + nomorHp  + "?text=Hallo%20Robo%20Racer,,%0aMohon%20konfrmasi%20untuk%20pendftaran%20Robo%20Race%202025%0aNama%20Rider%20:%20"+nama+"%0aKatergori%20:%20"+kategori+"%0aApakah%20mau%20untuk%20melanjutkan%20registrasi%20kak?%0aRobo%20tunggu%20konfirmasinya%20hari%20ini%20jam%2020:00%20wib%20dengan%20melampirkan%20bukti%20Transfer.%0aTerimakasih,,";
+            var waLink = "https://wa.me/" + nomorHp  + "?text=Hallo%20Robo%20Racer,,%0aMohon%20konfrmasi%20untuk%20pendftaran%20Robo%20Race%202025%0aNama%20Rider%20:%20"+nama+"%0aKatergori%20:%20"+kategori+"%0aApakah%20mau%20untuk%20melanjutkan%20registrasi%20kak?%0aRobo%20tunggu%20konfirmasinya%20hari%20ini%20jam%2015:00%20wib%20dengan%20melampirkan%20bukti%20Transfer.%0aTerimakasih,,%0a%0aBCA%20030-134-4952%20Wisnu%20Bhakti%20Prasetyo";
             $(this).find('a#proses-edit').attr('href', waLink).off('click').on('click', function(e) {
                 e.preventDefault(); 
                 $.ajax({

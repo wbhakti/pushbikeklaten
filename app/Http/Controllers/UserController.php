@@ -71,7 +71,9 @@ class UserController extends Controller
             ];
         }
 
-        $listKategori = DB::table('kategori')->get();
+        $listKategori = DB::table('kategori')
+        ->where('is_delete', 'false')
+        ->get();
 
         return view('register', [
             'dataEvent' => $dataEvent,
