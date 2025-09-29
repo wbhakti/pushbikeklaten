@@ -108,7 +108,7 @@
                                     data-statuspembayaran="{{ $item->status_pembayaran }}"
                                     data-tanggaldaftar="{{ $item->addtime }}"
                                     data-kategori="{{ $item->nama_kategori }}"
-                                    data-slimsuit="{{ $item->size_slim_suit }}"
+                                    data-slimsuit="{{ $item->size_jersey }}"
                                     data-noplate="{{ $item->number_plate }}"
                                     data-alamat="{{ $item->alamat_domisili }}"
                                     data-img="{{ $item->foto_akta_kia }}"

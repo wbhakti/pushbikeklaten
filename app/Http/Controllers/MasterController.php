@@ -140,6 +140,10 @@ class MasterController extends Controller
                     'action' => $request->input('action_event'),
                     'is_active' => 'Y',
                     'input_form' => $request->input('category_event'),
+                    'nama_bank' => $request->input('nama_bank'),
+                    'nomer_rekening' => $request->input('nomer_rekening'),
+                    'nama_rekening' => $request->input('nama_rekening'),
+                    'biaya_daftar' => $request->input('biaya_daftar'),
                     'addtime' => Carbon::now()->addHours(7)->format('Y-m-d H:i:s'),
                 ]);
 
@@ -163,6 +167,10 @@ class MasterController extends Controller
                         'title_event' => $request->input('title_event'),
                         'desc_event' => $request->input('desc_event'),
                         'action' => $request->input('action_event'),
+                        'nama_bank' => $request->input('nama_bank'),
+                        'nomer_rekening' => $request->input('nomer_rekening'),
+                        'nama_rekening' => $request->input('nama_rekening'),
+                        'biaya_daftar' => $request->input('biaya_daftar'),
                         'is_active' => $request->input('is_active'),
                     ]);
 

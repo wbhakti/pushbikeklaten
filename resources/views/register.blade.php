@@ -28,6 +28,7 @@
                             <form method="POST" action="/postregister" enctype="multipart/form-data">
                                 @csrf
                                 <input type="text" value="{{ $idEvent }}" name="idEvent" hidden>
+                                <input type="text" value="{{ $dataEvent->biaya_daftar }}" name="biaya_daftar" hidden>
                                 <div class="row justify-content-center">
                                     <div class="col-md-8 mx-auto">
                                         <div class="mb-3">
@@ -57,21 +58,19 @@
                                                     <!--<input type="number" class="form-control" name="{{ $field['name'] }}" id="{{ $field['name'] }}" max="999" required>-->
                                                 @elseif ($field['name'] === 'nomor_hp')
                                                     <input type="number" class="form-control" name="{{ $field['name'] }}" id="{{ $field['name'] }}" required>
-                                                @elseif ($field['name'] === 'size_slim_suit')
+                                                @elseif ($field['name'] === 'size_jersey')  
                                                     <select class="form-select" id="{{ $field['name'] }}" name="{{ $field['name'] }}" required>
-                                                        <option value="" disabled selected>Pilih Ukuran</option>
-                                                        <option value="S">S</option>
-                                                        <option value="M">M</option>
-                                                        <option value="L">L</option>
-                                                        <option value="XL">XL</option>
-                                                        <option value="2XL">2XL</option>
-                                                        <option value="3XL">3XL</option>
-                                                        <option value="4XL">4XL</option>
+                                                    <option value="" disabled selected>Pilih Size</option>
+                                                        @foreach ($dataSize as $size)
+                                                            <option value="{{ $size->id_size }}|{{ $size->size_jersey }}">
+                                                                {{ $size->size_jersey }}</option>
+                                                        @endforeach
                                                     </select>
                                                 @else
                                                     <input type="text" name="{{ $field['name'] }}" id="{{ $field['name'] }}" class="form-control" required />
                                                 @endif
                                             </div>
+                                            
                                         @endforeach
                                     </div>
                                 </div>

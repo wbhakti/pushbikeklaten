@@ -24,6 +24,8 @@ Route::get('/dashboard/event', 'App\Http\Controllers\MasterController@event');
 Route::get('/dashboard/listregistration', 'App\Http\Controllers\UserController@listregistration');
 Route::get('/dashboard/kategori', 'App\Http\Controllers\MasterController@kategori');
 Route::get('/getreportevent', 'App\Http\Controllers\UserController@reportevent');
+Route::get('/cekstatus', 'App\Http\Controllers\UserController@cekstatus');
+Route::get('/statustransaksi/{id_transaksi}', 'App\Http\Controllers\UserController@statustransaksi')->name('statusTransaksi');
 
 Route::post('/postlogin', 'App\Http\Controllers\UserController@postlogin');
 Route::post('/postslider', 'App\Http\Controllers\MasterController@postslider');

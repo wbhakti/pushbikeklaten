@@ -75,10 +75,15 @@ class UserController extends Controller
         ->where('is_delete', 'false')
         ->get();
 
+        $dataSize = DB::table('jersey')
+            ->where('id_event', $request->query('event'))
+            ->get();
+
         return view('register', [
             'dataEvent' => $dataEvent,
             'listKategori' => $listKategori,
             'inputForm' => $inputFields,
+            'dataSize' => $dataSize,
             'idEvent' => $request->query('event')
         ]);
     }
@@ -89,6 +94,8 @@ class UserController extends Controller
 
             // Validasi input
             $tmpKategori = explode('|', $request->input('kategori'));
+            $tmpJersey = explode('|', $request->input('size_jersey'));
+            $sizeJersey = $tmpJersey[1];
             $idKategori = $tmpKategori[0];
             $namaKategori = $tmpKategori[1];
 
@@ -129,6 +136,10 @@ class UserController extends Controller
                 }
             }
 
+            $idTransaksi = Carbon::now()->addHours(7)->format('dmYHis') . substr($request->input('nomor_hp'), -4);
+            $kodeUnik = mt_rand(10, 499);
+            $totalBayar = $request->input('biaya_daftar') + $kodeUnik;
+        
             // Simpan data registrasi
             DB::table('peserta')->insert([
                 'email' => $request->input('email'),
@@ -139,32 +150,183 @@ class UserController extends Controller
                 'kategori_id' => $idKategori,
                 'nama_kategori' => $namaKategori,
                 'foto_akta_kia' => $filename,
-                'size_slim_suit' => $request->input('size_slim_suit'),
+                'size_jersey' => $sizeJersey,
                 'nomor_hp' => $request->input('nomor_hp'),
                 'status_pembayaran' => 'BELUM_LUNAS',
+                'status_user' => 'PENDING',
                 'addtime' => Carbon::now()->addHours(7)->format('Y-m-d H:i:s'),
                 'id_event' => $request->input('idEvent'),
                 'tanggal_lahir' => $request->input('tanggal_lahir'),
                 'group_type' => $group,
+                'id_transaksi' => $idTransaksi,
+                'kode_unik' => $kodeUnik,
+                'total_bayar' => $totalBayar,
             ]);
 
-            // Redirect ke halaman checkout
-            return view('checkout', [
+            //kirim email
+            $dataEvent = DB::table('event')->where('id_event', '=', $request->input('idEvent'))->first();
+            $data = [
+                'idTransaksi' => $idTransaksi,
                 'email' => $request->input('email'),
                 'nama_lengkap' => $request->input('nama_lengkap'),
                 'number_plate' => $request->input('number_plate'),
                 'nama_team' => $request->input('nama_team'),
-                'alamat_domisili' => $request->input('alamat_domisili'),
-                'tanggal_lahir' => $request->input('tanggal_lahir'),
                 'kategori_id' => $namaKategori,
-                'foto_akta_kia' => $filename,
-                'size_slim_suit' => $request->input('size_slim_suit'),
+                'size_jersey' => $sizeJersey,
                 'nomor_hp' => $request->input('nomor_hp'),
-            ]);
+                'totalbayar' => $totalBayar,
+                'bank' => $dataEvent->nama_bank,
+                'namarek' => $dataEvent->nama_rekening,
+                'norek' => $dataEvent->nomer_rekening,
+            ];
+
+            $url_base = url('/');
+            
+            // Konten HTML untuk email
+            $bodyEmail = '
+            <html>
+            <body>
+                <h1 style="color: #3490dc;">[INVOICE]</h1>
+                <h1 style="color: #3490dc;">Terima kasih atas pendaftaran Klaten Pushbike Competition 2025</h1>
+                <p>Selamat bergabung, kami tunggu pembayaran kamu yaa..,</p>
+                <p>Berikut adalah informasi pendaftaran Anda:</p>
+
+                <table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; width: 50%;">
+                    <tr>
+                        <th style="background-color: #f2f2f2; text-align: left;">Informasi</th>
+                        <th style="background-color: #f2f2f2; text-align: left;">Detail</th>
+                    </tr>
+                    <tr>
+                        <td>ID Transaksi</td>
+                        <td>' . $data['idTransaksi'] . '</td>
+                    </tr>
+                    <tr>
+                        <td>Nama Peserta</td>
+                        <td>' . $data['nama_lengkap'] . '</td>
+                    </tr>
+                    <tr>
+                        <td>Kategori</td>
+                        <td>' . $data['kategori_id'] . '</td>
+                    </tr>
+                    <tr>
+                        <td>Number Plate</td>
+                        <td>' . $data['number_plate'] . '</td>
+                    </tr>
+                    <tr>
+                        <td>Size Jersey</td>
+                        <td>' . $data['size_jersey'] . '</td>
+                    </tr>
+                    <tr>
+                        <td>Tim atau Komunitas</td>
+                        <td>' . $data['nama_team'] . '</td>
+                    </tr>
+                    <tr>
+                        <td>Nomor Handphone</td>
+                        <td>' . $data['nomor_hp'] . '</td>
+                    </tr>
+                </table>
+
+                <br>
+                <h4 style="color: #28a745;">Informasi Pembayaran:</h4>
+                <div>
+                    <table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; width: 50%;">
+                        <tr>
+                            <td>Biaya Registrasi </td>
+                            <td>Rp ' . number_format(($request->input('biaya_daftar')), 0, ',', '.') . '</td>
+                        </tr>
+                        <tr>
+                            <td>Kode Unik</td>
+                            <td>Rp ' . number_format($kodeUnik, 0, ',', '.') . '</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total Bayar</strong></td>
+                            <td><strong>Rp ' . number_format($data['totalbayar'], 0, ',', '.') . '</strong></td>
+                        </tr>
+                    </table>
+                    <h5 style="color: #007bff;">Informasi Rekening:</h5>
+                    <ul style="list-style-type: none; padding: 0;">
+                        <li><strong>Bank:</strong> '.$data['bank'].'</li>
+                        <li><strong>Nomor Rekening:</strong> '.$data['norek'].'</li>
+                        <li><strong>Atas Nama:</strong> '.$data['namarek'].'</li>
+                    </ul>
+                </div>
+                
+                <p>Setelah Anda melakukan pembayaran, silahkan <a href="'.$url_base.'/statustransaksi/'.$data['idTransaksi'].'"> konfirmasi pembayaran disini</a></p>
+                <br>
+                <p>Silakan hubungi kami jika Anda memiliki pertanyaan lebih lanjut.</p>
+                <p>Salam,</p>
+                <p><strong>Customer Support</strong></p>
+            </body>
+            </html>
+            ';
+
+            Mail::html($bodyEmail, function ($message) use ($data) {
+                $message->to($data['email'], $data['nama_lengkap']);
+                $message->subject('Informasi Pembayaran');
+            });
+
+            return redirect()->route('statusTransaksi', ['id_transaksi' => $idTransaksi]);
 
         }catch(\Exception $e){
             Log::error('Error occurred report : ' . $e->getMessage());
             return back()->with('error', 'Terjadi kesalahan : ' . $e->getMessage());
+        }
+    }
+
+
+    public function cekstatus()
+    {
+        try{
+
+            return view('cekstatus');
+
+        }catch(\Exception $e){
+            Log::error('Error occurred report : ' . $e->getMessage());
+            abort(404);
+        }
+        
+    }
+
+    public function statusTransaksi($id_transaksi)
+    {
+        try{
+
+            $dataPeserta = DB::table('peserta')
+            ->join('event', 'peserta.id_event', '=', 'event.id_event')
+            ->where('id_transaksi', $id_transaksi)
+            ->select('peserta.*', 'event.*')
+            ->first();
+
+            if (!$dataPeserta) {
+                abort(404);
+            }
+
+            // Redirect ke halaman checkout
+            return view('checkout', [
+                'email' => $dataPeserta->email,
+                'nama_lengkap' => $dataPeserta->nama_lengkap,
+                'number_plate' => $dataPeserta->number_plate,
+                'nama_team' => $dataPeserta->nama_team,
+                'alamat_domisili' => $dataPeserta->alamat_domisili,
+                'tanggal_lahir' => $dataPeserta->tanggal_lahir,
+                'kategori_id' => $dataPeserta->nama_kategori,
+                'foto_akta_kia' => $dataPeserta->foto_akta_kia,
+                'size_jersey' => $dataPeserta->size_jersey,
+                'nomor_hp' => $dataPeserta->nomor_hp,
+
+                'biaya_daftar' => $dataPeserta->biaya_daftar,
+                'kode_unik' => $dataPeserta->kode_unik,
+                'total_bayar' => $dataPeserta->total_bayar,
+                'status_pembayaran' => $dataPeserta->status_user,
+                'nama_bank' => $dataPeserta->nama_bank,
+                'nama_rek' => $dataPeserta->nama_rekening,
+                'nomer_rek' => $dataPeserta->nomer_rekening,
+                'idTransaksi' => $dataPeserta->id_transaksi,
+            ]);
+
+        }catch(\Exception $e){
+            Log::error('Error occurred report : ' . $e->getMessage());
+            abort(404);
         }
     }
 
@@ -288,7 +450,7 @@ class UserController extends Controller
                     $sheet->setCellValue("F$row", $data->nama_team);
                     $sheet->setCellValue("G$row", $data->kategori);
                     $sheet->setCellValue("H$row", $data->group_type);
-                    $sheet->setCellValue("I$row", $data->size_slim_suit);
+                    $sheet->setCellValue("I$row", $data->size_jersey);
                     $sheet->setCellValue("J$row", $data->nomor_hp);
                     $sheet->setCellValue("K$row", $data->alamat_domisili);
                     $sheet->setCellValue("L$row", $data->status_pembayaran);
@@ -462,6 +624,10 @@ class UserController extends Controller
                 DB::table('peserta')
                     ->where('rowid', $lastRow->rowid)
                     ->update(['foto_bukti_trf' => $filename]);
+
+                DB::table('peserta')
+                    ->where('rowid', $lastRow->rowid)
+                    ->update(['status_user' => 'CONFIRMATION']);
             }
 
             return view('success');

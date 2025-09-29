@@ -29,9 +29,6 @@
     <div class="card-header py-3">
         <!-- Page Heading -->
         <h1 class="h3 mb-2 text-gray-800">Data Master Event</h1>
-        <p class="mb-4" style="color:black">
-            loremipsum loremipsum loremipsum loremipsum loremipsum loremipsum
-        </p>
         @if(isset($error))
         <div align="center">
             <text style="color:red">{{ $error }}</text>
@@ -78,6 +75,10 @@
                                         data-desc="{{ $item->desc_event }}"
                                         data-action="{{ $item->action }}"
                                         data-img="{{ $item->img_event }}"
+                                        data-bank="{{ $item->nama_bank }}"
+                                        data-rekening="{{ $item->nomer_rekening }}"
+                                        data-nama_rekening="{{ $item->nama_rekening }}"
+                                        data-biaya="{{ $item->biaya_daftar }}"
                                         data-isactive="{{ $item->is_active }}">Edit</button>
                                     <button type="submit" name="proses" value="delete" class="btn btn-danger mb-2">Delete</button>
                                 </div>
@@ -138,6 +139,26 @@
                                 <input type="hidden" id="category_event" name="category_event" required>
                             </div>
                         </div>
+                        <div class="row justify-content-center">
+                            <div class="form-group col-sm-6">
+                                <label for="nama_bank"><b>Nama Bank</b></label>
+                                <input type="text" name="nama_bank" class="form-control" required />
+                            </div>                            
+                            <div class="form-group col-sm-6">
+                            <label for="nomor_rekening"><b>Nomor Rekening</b></label>
+                                <input type="text" name="nomer_rekening" class="form-control" required />
+                            </div>                            
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="form-group col-sm-6">
+                                <label for="nama_rekening"><b>Nama Rekening</b></label>
+                                <input type="text" name="nama_rekening" class="form-control" required />
+                            </div>                            
+                            <div class="form-group col-sm-6">
+                            <label for="biaya_daftar"><b>Biaya Daftar</b></label>
+                                <input type="text" name="biaya_daftar" class="form-control" required />
+                            </div>                            
+                        </div>
                         <br />
                         <div align="center">
                             <button type="submit" name="proses" value="save" class="btn btn-success">Save Event</button>
@@ -183,6 +204,22 @@
                         <div class="form-group">
                             <label for="editDescEvent"><b>Desc Event</b></label>
                             <textarea name="desc_event" id="editDescEvent" class="form-control" rows="4" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="editBankEvent"><b>Nama Bank</b></label>
+                            <input type="text" name="nama_bank" id="editBankEvent" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="editRekeningEvent"><b>Nomor Rekening</b></label>
+                            <input type="text" name="nomer_rekening" id="editRekeningEvent" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="editNamaRekeningEvent"><b>Nama Rekening</b></label>
+                            <input type="text" name="nama_rekening" id="editNamaRekeningEvent" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="editBiayaEvent"><b>Biaya Daftar</b></label>
+                            <input type="text" name="biaya_daftar" id="editBiayaEvent" class="form-control" required />
                         </div>
                         <div class="form-group">
                             <label for="editImgEvent"><b>Image Event</b></label>
@@ -242,6 +279,10 @@ $(document).ready(function() {
             var title = $(this).data('title');
             var desc = $(this).data('desc');
             var action = $(this).data('action');
+            var bank = $(this).data('bank');
+            var rekening = $(this).data('rekening');
+            var nama_rekening = $(this).data('nama_rekening');
+            var biaya = $(this).data('biaya');
             var img = $(this).data('img');
             var isactive = $(this).data('isactive');
 
@@ -250,6 +291,10 @@ $(document).ready(function() {
             $('#editTitleEvent').val(title);
             $('#editDescEvent').val(desc);
             $('#editActionEvent').val(action);
+            $('#editBankEvent').val(bank);
+            $('#editRekeningEvent').val(rekening);
+            $('#editNamaRekeningEvent').val(nama_rekening);
+            $('#editBiayaEvent').val(biaya);
             $('#editOldImgEvent').val(img);
             $('#editIsActive').val(isactive);
             $('#currentImage').attr('src', "{{ asset('img/') }}/" + img);

@@ -11,7 +11,11 @@
                     </div>
                     <div class="card-body">
                         <h5 class="card-title text-center mb-4">Terima kasih, {{ $nama_lengkap }}!</h5>
-                        <p class="text-muted text-center mb-4">Proses pemesanan anda telah sukses, Segera lakukan pembayaran</p>
+                        @if ($status_pembayaran === 'APPROVED')
+                            <p class="text-muted text-center mb-4">Pembayaran Anda telah diterima. Terima kasih!</p>
+                        @else
+                            <p class="text-muted text-center mb-4">Proses pemesanan anda telah sukses, Segera lakukan pembayaran</p>
+                        @endif
                         <p class="text-muted text-center mb-4">Berikut adalah detail pendaftaran dan informasi pembayaran Anda:</p>
                         
                          <!-- Ringkasan Pendaftaran -->
@@ -19,6 +23,10 @@
                             <div class="mb-4">
                                 <h6 class="card-subtitle mb-3 text-primary">Ringkasan Pendaftaran:</h6>
                                 <ul class="list-group mb-4 d-inline-block text-start">
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <span class="fw-bold">ID Transaksi:</span>
+                                        <span class="ms-2 text-secondary">{{ $idTransaksi }}</span>
+                                    </li>
                                     <li class="list-group-item d-flex justify-content-between">
                                         <span class="fw-bold">Email:</span>
                                         <span class="ms-2 text-secondary">{{ $email }}</span>
@@ -45,7 +53,7 @@
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between">
                                         <span class="fw-bold">Size Jersey:</span>
-                                        <span class="ms-2 text-secondary">{{ $size_slim_suit }}</span>
+                                        <span class="ms-2 text-secondary">{{ $size_jersey }}</span>
                                     </li>
                                 </ul>
                             </div>
@@ -55,39 +63,62 @@
                         <div class="mb-4">
                             <h4 class="mb-2">Total Pembayaran:</h4>
                             <div class="p-3 border border-success rounded bg-light">
-                                <div class="d-flex align-items-center mb-3">
-                                    <div class="me-3">
-                                        <!-- Icon (Optional) -->
-                                        <i class="bi bi-cash-stack fs-3 text-success"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="mb-0"><span class="text-success">Rp 200.000</span></h4>
-                                        <p class="mb-0 text-muted">Jumlah yang harus dibayar untuk pendaftaran.</p>
-                                        <p class="mb-0 text-muted">Contoh 200.023, kode angka belakang sesuai plate number riders "23"</p>
-                                        <p class="mb-0 text-muted">Harap Memberi keterangan transfer (nama rider_kategori class)</p>
-                                    </div>
-                                </div>
+                                <ul class="list-group">
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <span class="fw-bold">Biaya Registrasi:</span>
+                                        <span class="ms-2 text-secondary">Rp {{ number_format($biaya_daftar, 0, ',', '.') }}</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <span class="fw-bold">Kode Unik:</span>
+                                        <span class="ms-2 text-secondary">Rp {{ number_format($kode_unik, 0, ',', '.') }}</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <span class="fw-bold">Total :</span>
+                                        <span class="fw-bold">Rp {{ number_format($total_bayar, 0, ',', '.') }}</span>
+                                    </li>
+                                </ul>
                                 <!-- Informasi Rekening -->
                                 <div class="mt-3">
                                     <h6 class="text-primary">Informasi Rekening:</h6>
                                     <ul class="list-group">
                                         <li class="list-group-item d-flex justify-content-between border-0 p-0">
                                             <span class="fw-bold">Bank:</span>
-                                            <span class="text-secondary">BCA</span>
+                                            <span class="text-secondary">{{$nama_bank}}</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between border-0 p-0">
                                             <span class="fw-bold">Nomor Rekening:</span>
-                                            <span class="text-secondary">030-134-4952</span>
+                                            <span class="text-secondary">{{$nomer_rek}}</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between border-0 p-0">
                                             <span class="fw-bold">Atas Nama:</span>
-                                            <span class="text-secondary">Wisnu Bhakti Prasetyo</span>
+                                            <span class="text-secondary">{{$nama_rek}}</span>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
 
+                        <!-- Informasi Status Pembayaran -->
+                        <div class="mb-4">
+                            <h4 class="mb-2">Status Pembayaran:</h4>
+                            <div class="p-3 border rounded bg-light">
+                                @if ($status_pembayaran === 'PENDING')
+                                    <p class="text-danger fw-bold">Belum Dibayar</p>
+                                    <p class="text-muted">Silakan lakukan pembayaran sesuai dengan informasi rekening di atas.</p>
+                                @elseif ($status_pembayaran === 'CONFIRMATION')
+                                    <p class="text-warning fw-bold">Menunggu Konfirmasi</p>
+                                    <p class="text-muted">Bukti transfer Anda sedang diperiksa. Harap tunggu beberapa saat.</p>
+                                @elseif ($status_pembayaran === 'APPROVED')
+                                    <p class="text-success fw-bold">Lunas</p>
+                                    <p class="text-muted">Pembayaran Anda telah diterima. Terima kasih!</p>
+                                @else
+                                    <p class="text-muted">Status tidak diketahui. Harap hubungi admin.</p>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Form Upload Bukti Transfer -->
+                        @if ($status_pembayaran !== 'APPROVED')
                         <div class="text-center">
                             <form method="POST" action="/postbuktitransfer" enctype="multipart/form-data">
                                 @csrf
@@ -99,7 +130,8 @@
                                 </div>
                                 <button type="submit" class="btn btn-primary">Kirim Bukti Transfer</button>
                             </form>
-                        </div>                        
+                        </div>     
+                        @endif                   
                         
                     </div>
                 </div>
