@@ -51,10 +51,6 @@
             @foreach ($data as $index => $item)
                 <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
                     <img src="{{ asset('img/' . $item->img_slider) }}" class="img-fluid d-block w-100" alt="" style="object-fit: cover;">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h1>{{ $item->title_slider }}</h5>
-                            <p>{{ $item->desc_slider }}</p>
-                    </div>
                 </div>
             @endforeach
         </div>
