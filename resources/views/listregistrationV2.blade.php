@@ -281,10 +281,10 @@
             modal.find('#modalSizeSlimsuit').val(slimsuit);
             modal.find('#modalNoPlate').val(noplate);
             modal.find('#modalAlamat').val(alamat);
-            modal.find('#currentImage').attr('src', "{{ url('/webevent/public/img') }}/" + img);
-            modal.find('#imageLink').attr('href', "{{ url('/webevent/public/img') }}/" + img);
-            modal.find('#currentImageTransfer').attr('src', "{{ url('/webevent/public/invoice') }}/" + buktiTransfer);
-            modal.find('#imageLinkTransfer').attr('href', "{{ url('/webevent/public/invoice') }}/" + buktiTransfer);
+            modal.find('#currentImage').attr('src', "{{ url('/pushbikeklaten/public/img') }}/" + img);
+            modal.find('#imageLink').attr('href', "{{ url('/pushbikeklaten/public/img') }}/" + img);
+            modal.find('#currentImageTransfer').attr('src', "{{ url('/pushbikeklaten/public/invoice') }}/" + buktiTransfer);
+            modal.find('#imageLinkTransfer').attr('href', "{{ url('/pushbikeklaten/public/invoice') }}/" + buktiTransfer);
 
             if (!buktiTransfer || !buktiTransfer.includes('.jpg')) {
                 const textElement = $('<span>')

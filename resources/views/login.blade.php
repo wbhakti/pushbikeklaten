@@ -75,7 +75,7 @@
     <main class="form-signin w-100 m-auto">
         <form method="POST" action="/postlogin">
             @csrf
-            <img class="mb-4" src="{{ asset('img/robot_icon.png') }}" alt="" width="72"
+            <img class="mb-4" src="{{ asset('img/logo_KPK.png') }}" alt="" width="72"
                 height="57">
             <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 

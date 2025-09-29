@@ -28,7 +28,7 @@
     <!-- Responsive navbar-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container px-5">
-                <a class="navbar-brand" href="{{ url('/') }}">Klaten Push Bike Competition 2025</a>
+                <a class="navbar-brand" href="{{ url('/') }}">Keluarga Pushbike Klaten</a>
                 <!--<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>-->
                 <form class="d-flex" action="/cekstatus" method="GET">
                     <button class="btn btn-outline-light" type="submit">
@@ -46,7 +46,7 @@
         </div>
         <!-- Footer-->
         <footer class="py-5 bg-dark">
-            <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; Pushbike Klaten 2025</p></div>
+            <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; Keluarga Pushbike Klaten 2025</p></div>
         </footer>
 
     <!-- Bootstrap core JavaScript-->
