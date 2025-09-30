@@ -105,6 +105,9 @@
                                 @if ($status_pembayaran === 'PENDING')
                                     <p class="text-danger fw-bold">Belum Dibayar</p>
                                     <p class="text-muted">Silakan lakukan pembayaran sesuai dengan informasi rekening di atas.</p>
+                                @elseif ($status_pembayaran === 'SENTBACK')
+                                    <p class="text-warning fw-bold">Belum Dibayar</p>
+                                    <p class="text-muted">Silakan lakukan pembayaran sesuai dengan informasi rekening di atas.</p>
                                 @elseif ($status_pembayaran === 'CONFIRMATION')
                                     <p class="text-warning fw-bold">Menunggu Konfirmasi</p>
                                     <p class="text-muted">Bukti transfer Anda sedang diperiksa. Harap tunggu beberapa saat.</p>
@@ -116,7 +119,7 @@
                                 @endif
                             </div>
                         </div>
-
+                        
                         <!-- Form Upload Bukti Transfer -->
                         @if ($status_pembayaran !== 'APPROVED')
                         <div class="text-center">

@@ -114,6 +114,10 @@
                                     data-img="{{ $item->foto_akta_kia }}"
                                     data-statususer="{{ $item->status_user }}"
                                     data-group="{{ $item->group_type }}"
+                                    data-biayadaftar="{{ $item->biaya_daftar }}"
+                                    data-totalbayar="{{ $item->total_bayar }}"
+                                    data-kodeunik="{{ $item->kode_unik }}"
+                                    data-idtransaksi="{{ $item->id_transaksi }}"
                                     data-tanggallahir="{{ $item->tanggal_lahir }}"
                                     data-buktitransfer="{{ $item->foto_bukti_trf }}">
                                     Detail
@@ -198,6 +202,10 @@
                             <input type="text" class="form-control" id="modalGroup" name="group" readonly>
                         </div>
                         <div class="form-group">
+                            <label for="modalTotal"><strong>Total Bayar:</strong></label>
+                            <input type="text" class="form-control" id="modalTotal" name="total_bayar" readonly>
+                        </div>
+                        <div class="form-group">
                             <label><strong>Foto Akta/Kia:</strong></label>
                             <a id="imageLink" href="#" target="_blank">
                                 <img id="currentImage" src="" alt="Current Image" style="max-width: 100px; max-height: 100px;">
@@ -266,6 +274,10 @@
             var img = button.data('img');
             var statusUser = button.data('statususer');
             var buktiTransfer = button.data('buktitransfer');
+            var biayaDaftar = button.data('biayadaftar');
+            var kodeUnik = button.data('kodeunik');
+            var totalBayar = button.data('totalbayar');
+            var idTransaksi = button.data('idtransaksi');
 
             var modal = $(this);
             modal.find('#editRowid').val(rowid);
@@ -281,8 +293,9 @@
             modal.find('#modalSizeSlimsuit').val(slimsuit);
             modal.find('#modalNoPlate').val(noplate);
             modal.find('#modalAlamat').val(alamat);
-            modal.find('#currentImage').attr('src', "{{ url('/pushbikeklaten/public/img') }}/" + img);
-            modal.find('#imageLink').attr('href', "{{ url('/pushbikeklaten/public/img') }}/" + img);
+            modal.find('#modalTotal').val(totalBayar);
+            modal.find('#currentImage').attr('src', "{{ url('/pushbikeklaten/public/KIA_KK') }}/" + img);
+            modal.find('#imageLink').attr('href', "{{ url('/pushbikeklaten/public/KIA_KK') }}/" + img);
             modal.find('#currentImageTransfer').attr('src', "{{ url('/pushbikeklaten/public/invoice') }}/" + buktiTransfer);
             modal.find('#imageLinkTransfer').attr('href', "{{ url('/pushbikeklaten/public/invoice') }}/" + buktiTransfer);
 
@@ -302,7 +315,11 @@
 
             if (statusUser === 'PENDING') {
                 modal.find('button[name="proses"][value="approve"]').show();
-            } else if (statusUser === 'CONFIRMATION') {
+                modal.find('a#proses-edit').show()
+            } else if (statusUser === 'SENTBACK') {
+                modal.find('button[name="proses"][value="approve"]').show();
+                modal.find('a#proses-edit').show();
+            }else if (statusUser === 'CONFIRMATION') {
                 modal.find('button[name="proses"][value="approve"]').show();
                 modal.find('a#proses-edit').hide();
             }
@@ -315,8 +332,8 @@
             if (nomorHp.startsWith("0")) {
                 nomorHp = "62" + nomorHp.substring(1);
             }
-            // var waLink = "https://wa.me/" + nomorHp  + "?text=Hallo%20Robo%20Racer,,%0aMohon%20konfrmasi%20untuk%20pendftaran%20Robo%20Race%202025%0aNama%20Rider%20:%20"+nama+"%0aKatergori%20:%20"+kategori+"%0aApakah%20mau%20untuk%20melanjutkan%20registrasi%20kak?%0aRobo%20tunggu%20konfirmasinya%20hari%20ini%20jam%2020:00%20wib%20dengan%20melampirkan%20bukti%20Transfer.%0aTerimakasih,,";
-            var waLink = "https://wa.me/" + nomorHp  + "?text=Hallo%20Robo%20Racer,,%0aMohon%20konfrmasi%20untuk%20pendftaran%20Robo%20Race%202025%0aNama%20Rider%20:%20"+nama+"%0aKatergori%20:%20"+kategori+"%0aApakah%20mau%20untuk%20melanjutkan%20registrasi%20kak?%0aRobo%20tunggu%20konfirmasinya%20hari%20ini%20jam%2015:00%20wib%20dengan%20melampirkan%20bukti%20Transfer.%0aTerimakasih,,%0a%0aBCA%20030-134-4952%20Wisnu%20Bhakti%20Prasetyo";
+            var waLink = "https://wa.me/" + nomorHp  + "?text=Hallo%20Racer%2C%2C%0aMohon%20konfrmasi%20untuk%20pendftaran%20Klaten%20Pushbike%20Competition%202025%0aNama%20Rider%20%3A%20"+nama+"%0aKatergori%20%3A%20"+kategori+"%0aApakah%20mau%20untuk%20melanjutkan%20registrasi%20kak%3F%0aAdmin%20tunggu%20konfirmasinya%20hari%20ini%20jam%2015%3A00%20wib%20dengan%20melampirkan%20bukti%20Transfer.%0aTerimakasih%2C%2C%0a%0aInformasi%20Pembayaran%3A%0aBiaya%20Registrasi%20%3A%20Rp%20"+biayaDaftar+"%0aKode%20Unik%20%3A%20"+kodeUnik+"%0aTotal%20%3A%20Rp%20"+totalBayar+"%0a%0ASetelah%20Anda%20melakukan%20pembayaran%2C%20silahkan%20konfirmasi%20pembayaran%20disini%0ahttps%3A%2F%2Fpushbikeklaten.com%2Fstatustransaksi%2F"+idTransaksi;
+            // var waLink = "https://wa.me/" + nomorHp  + "?text=Hallo%20Robo%20Racer,,%0aMohon%20konfrmasi%20untuk%20pendftaran%20Robo%20Race%202025%0aNama%20Rider%20:%20"+nama+"%0aKatergori%20:%20"+kategori+"%0aApakah%20mau%20untuk%20melanjutkan%20registrasi%20kak?%0aRobo%20tunggu%20konfirmasinya%20hari%20ini%20jam%2015:00%20wib%20dengan%20melampirkan%20bukti%20Transfer.%0aTerimakasih,,%0a%0aBCA%20030-134-4952%20Wisnu%20Bhakti%20Prasetyo";
             $(this).find('a#proses-edit').attr('href', waLink).off('click').on('click', function(e) {
                 e.preventDefault(); 
                 $.ajax({

@@ -106,12 +106,12 @@ class UserController extends Controller
                 if ($request->file('foto_akta_kia')->extension() == "pdf") {
                     $file = $request->file('foto_akta_kia');
                     $filename = 'foto_'.$idKategori.'_'.$request->input('nomor_hp').'.pdf';
-                    $file->move(public_path('img'), $filename);
+                    $file->move(public_path('KIA_KK'), $filename);
 
                 } else {
                     $file = $request->file('foto_akta_kia');
                     $filename = 'foto_'.$idKategori.'_'.$request->input('nomor_hp').'.jpg';
-                    $file->move(public_path('img'), $filename);
+                    $file->move(public_path('KIA_KK'), $filename);
                 }
             }
 
@@ -367,7 +367,7 @@ class UserController extends Controller
                 ->join('event', 'peserta.id_event', '=', 'event.id_event')
                 ->where('peserta.is_delete', '0')
                 ->where('peserta.id_event', '=', $id_event)
-                ->select('peserta.*', 'event.title_event')
+                ->select('peserta.*', 'event.title_event', 'event.biaya_daftar')
                 ->get();
 
                 return view('listregistrationV2', [
@@ -434,9 +434,9 @@ class UserController extends Controller
                 $sheet->setCellValue("M$startRow", 'Status');
 
                 // Styling header kolom
-                $sheet->getStyle("A$startRow:K$startRow")->getFont()->setBold(true);
-                $sheet->getStyle("A$startRow:K$startRow")->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-                $sheet->getStyle("A$startRow:K$startRow")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                $sheet->getStyle("A$startRow:M$startRow")->getFont()->setBold(true);
+                $sheet->getStyle("A$startRow:M$startRow")->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("A$startRow:M$startRow")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
                 //data ke sheet
                 $row = $startRow + 1;
@@ -569,7 +569,7 @@ class UserController extends Controller
                 DB::table('peserta')
                     ->where('rowid', $request->input('rowid'))
                     ->update([
-                        'status_user' => 'CONFIRMATION',
+                        'status_user' => 'SENTBACK',
                     ]);
 
                 // Kembalikan respons JSON
